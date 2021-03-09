@@ -1,6 +1,6 @@
 
-WIDTH = 1000
-HEIGHT= 800
+WIDTH = 587
+HEIGHT= 423
 
 ash = Actor("ash1", (WIDTH/2, HEIGHT/2))
 
@@ -9,7 +9,7 @@ ash_down_int = 0
 
 def draw():
     screen.clear()
-    screen.fill((0,0,0))
+    screen.blit('pokemonbg',(0,0))
     ash.draw()
 
 def switch_ash():
@@ -27,14 +27,25 @@ def switch_ash():
         ash.pos = (ash.x, ash.y+0.5)
 
 def end_jump():
-    animate(ash, tween="accelerate", pos=(ash.x, ash.y + 50))
+    if(keyboard.right):
+        animate(ash, duration=0.1, pos=(ash.x + 30, ash.y))
+    animate(ash, tween="accelerate",duration=0.2, pos=(ash.x, ash.y + 50))
+
+def jump_up():
+
+    animate(ash,tween='linear', duration=0.1,on_finished=end_jump, pos=(ash.x, ash.y-50))
 
 def move_ash():
     if(keyboard.down):
         ash.image = 'ash2'
-        clock.schedule_interval(switch_ash, 0.01)
+        #clock.schedule_interval(switch_ash, 0.01)
+        ash.y +=2
+    if(keyboard.up):
+        ash.image = 'ash2'
+        ash.y -=1
     if(keyboard.space):
-        animate(ash,tween='bounce_start',on_finished=end_jump, pos=(ash.x, ash.y-50))
+        clock.schedule_unique(jump_up, 0.09)
+
     if(keyboard.left):
         ash.image = 'ashleft'
         ash.x -= 2
